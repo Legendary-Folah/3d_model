@@ -12,9 +12,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final Flutter3DController _controller1 = Flutter3DController();
   final Flutter3DController _controller2 = Flutter3DController();
 
-  void _playAnimation() {
-    _controller1.playAnimation();
-    _controller2.playAnimation();
+  void _playAnimation(String animationName) {
+    _controller1.playAnimation(animationName: animationName);
+    _controller2.playAnimation(animationName: animationName);
   }
 
   void _pauseAnimation() {
@@ -43,11 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Expanded(
                   child: SizedBox(
-                    height: 500,
                     child: Flutter3DViewer(
                       activeGestureInterceptor: true,
                       controller: _controller1,
-                      src: 'assets/models/first_avatar.glb',
+                      src: 'assets/models/anotherModel.glb',
                       progressBarColor: Colors.blue,
                       onLoad: (String modelAddress) {
                         debugPrint('Model 1 loaded: $modelAddress');
@@ -60,11 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Expanded(
                   child: SizedBox(
-                    height: 500,
                     child: Flutter3DViewer(
                       activeGestureInterceptor: true,
                       controller: _controller2,
-                      src: 'assets/models/second_avatar.glb',
+                      src: 'assets/models/anotherModel.glb',
                       progressBarColor: Colors.blueAccent,
                       onLoad: (String modelAddress) {
                         debugPrint('Model 2 loaded: $modelAddress');
@@ -78,18 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
+          Column(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomButton(onPressed: _playAnimation, text: 'PLAY'),
-                  CustomButton(onPressed: _pauseAnimation, text: 'PAUSE'),
-                  CustomButton(onPressed: _resetAnimation, text: 'RESET'),
+                  CustomButton(
+                    onPressed: () => _playAnimation('Walk'),
+                    text: 'Walk',
+                  ),
+                  CustomButton(
+                    onPressed: () => _playAnimation('Jump'),
+                    text: 'Jump',
+                  ),
+                  CustomButton(
+                    onPressed: () => _playAnimation('Run'),
+                    text: 'Run',
+                  ),
                 ],
               ),
-            ),
+              CustomButton(onPressed: _pauseAnimation, text: 'Pause'),
+              CustomButton(onPressed: _resetAnimation, text: 'Reset'),
+            ],
           ),
         ],
       ),
@@ -105,7 +115,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 100,
       height: 45,
       child: ElevatedButton(
